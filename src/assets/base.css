@@ -1,44 +1,101 @@
 /*TODO CSS cleanup*/
-
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  --em-background-gray: #080c10;
+  --em-darker-gray: #181c1f;
+  --em-dark-gray: #101214;
+  --em-light-gray: #282f35;
+  --em-soft-gray: #5d6770;
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+  --em-darker-green: #2b7200;
+  --em-dark-green: #24b437;
+  --em-light-green: #22e973;
+  --em-soft-green: #7effb3;
 
-  --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --em-red: #eb4444;
+  --em-yellow: #f2c43d;
+  --em-blue: #4473eb;
 }
 
 /* semantic color variables for this project */
 :root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
+  .bg-em-main {
+    background-color: var(--em-background-gray);
+  }
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
+  /* Gray Backgrounds */
+  .bg-em-gray-darker {
+    background-color: var(--em-darker-gray);
+  }
 
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
+  .bg-em-gray-dark {
+    background-color: var(--em-dark-gray);
+  }
 
-  --section-gap: 160px;
+  .bg-em-gray-light {
+    background-color: var(--em-light-gray);
+  }
+
+  .bg-em-gray-soft {
+    background-color: var(--em-soft-gray);
+  }
+
+  /* Hover Gray Backgrounds */
+  .hover\:bg-em-gray-darker {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-darker-gray);
+      }
+    }
+  }
+
+  .hover\:bg-em-gray-dark {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-dark-gray);
+      }
+    }
+  }
+
+  .hover\:bg-em-gray-light {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-light-gray);
+      }
+    }
+  }
+
+  .hover\:bg-em-gray-soft {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-darker-soft);
+      }
+    }
+  }
+
+  /* Green Backgrounds */
+  .bg-em-green-darker {
+    background-color: var(--em-darker-green);
+  }
+
+  .bg-em-green-dark {
+    background-color: var(--em-dark-green);
+  }
+
+  .bg-em-green-light {
+    background-color: var(--em-light-green);
+  }
+
+  .bg-em-green-soft {
+    background-color: var(--em-soft-green);
+  }
+
+  /* Green Borders */
+  .bd-em-green-dark {
+    border-color: var(--em-dark-green);
+  }
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: light) {
   :root {
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
@@ -50,39 +107,8 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-}
+} */
 
 body {
-  min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--em-background-gray);
 }
