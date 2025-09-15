@@ -11,3 +11,15 @@ Emerald is a Docker container management web app with a focus to manage ITZG/min
 ## Requirements
 
 ## Functionalities
+
+## Dev - Servers
+
+#### Vue Server
+> **Ini Command** - ```npm run dev```
+> **Hosted** - ```http://localhost:5173/```
+> **Managed by** - ```vite.config.js```
+
+#### Python Server
+> **Ini Command** - ```uvicorn main:app --reload```
+> **Hosted** - ```http://127.0.0.1:8000/```
+> **Managed by** - ```main.py```
