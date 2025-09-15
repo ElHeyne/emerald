@@ -109,6 +109,10 @@
   }
 } */
 
+* {
+  color: white;
+}
+
 body {
   background-color: var(--em-background-gray);
 }
