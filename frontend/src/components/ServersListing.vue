@@ -24,10 +24,13 @@ onMounted(async () => {
 
 <template>
   <section>
-    <h1 class="text-2xl font-bold mb-2.5">Docker Containers</h1>
+    <h1 class="text-2xl font-bold mb-2.5">Minecraft Servers</h1>
+
+    <!-- Loader -->
     <div v-if="state.isLoading" class="text-center text-gray-500 py-6">
       <PulseLoader />
     </div>
+
     <ul>
       <span v-if="noServers && isLoading">No Servers</span>
       <li v-for="c in state.containers" :key="c.id">
@@ -36,7 +39,11 @@ onMounted(async () => {
             <div class="flex items-center">
               <i
                 class="pi pi-circle-fill mr-2.5"
-                :class="c.status == 'exited' ? 'state-exited' : 'state-active'"
+                :class="{
+                  'state-exited': c.status === 'exited',
+                  'state-running': c.status === 'running',
+                  'state-paused': c.status === 'paused',
+                }"
               ></i>
               {{ c.name }}
             </div>

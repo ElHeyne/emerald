@@ -112,7 +112,7 @@
   }
 
   /*State Icons*/
-  .state-active {
+  .state-running {
     color: var(--em-light-green);
   }
 
@@ -120,7 +120,7 @@
     color: var(--em-red);
   }
 
-  .state-inactive {
+  .state-paused {
     color: var(--em-yellow);
   }
 }
