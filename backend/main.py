@@ -14,14 +14,21 @@ app.add_middleware(
 )
 
 @app.get("/containers")
-def list_containers(all: bool = True):
-    containers = client.containers.list(all=all)
-    return [
-        {
-            "id": c.id,
-            "name": c.name,
-            "status": c.status,
-            "image": c.image.tags
-        }
-        for c in containers
-    ]
+def list_containers():
+    try:
+        containers = client.containers.list(all=True)
+        
+        filtered = []
+        for c in containers:
+            tags = c.image.tags or []
+            if any(tag.startswith("itzg") for tag in tags):
+                filtered.append({
+                    "id": c.id,
+                    "name": c.name,
+                    "status": c.status,
+                    "image": tags
+                })
+        
+        return filtered
+    except Exception as error:
+        print("Error catching containers: ", error)

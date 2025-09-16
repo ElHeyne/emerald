@@ -89,9 +89,39 @@
     background-color: var(--em-soft-green);
   }
 
+  /* Gray Borders */
+  .bd-em-gray-darker {
+    border-color: var(--em-darker-gray);
+  }
+
+  .bd-em-gray-dark {
+    border-color: var(--em-dark-gray);
+  }
+
+  .bd-em-gray-light {
+    border-color: var(--em-light-gray);
+  }
+
+  .bd-em-gray-soft {
+    border-color: var(--em-soft-gray);
+  }
+
   /* Green Borders */
   .bd-em-green-dark {
     border-color: var(--em-dark-green);
+  }
+
+  /*State Icons*/
+  .state-active {
+    color: var(--em-light-green);
+  }
+
+  .state-exited {
+    color: var(--em-red);
+  }
+
+  .state-inactive {
+    color: var(--em-yellow);
   }
 }
 
@@ -109,7 +139,7 @@
   }
 } */
 
-* {
+html {
   color: white;
 }
 
