@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, reactive } from 'vue'
+import { onMounted, computed, reactive } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
 const state = reactive({
@@ -35,7 +35,9 @@ onMounted(async () => {
       <span v-if="noServers && isLoading">No Servers</span>
       <li v-for="c in state.containers" :key="c.id">
         <RouterLink to="/servers">
-          <section class="max-w-sm p-4 border bd-em-gray-light rounded-lg bg-em-gray-darker mb-3">
+          <section
+            class="max-w-sm p-4 border bd-em-gray-light hover:bg-em-gray-light rounded-lg bg-em-gray-darker mb-3 duration-300 ease-in-out"
+          >
             <div class="flex items-center">
               <i
                 class="pi pi-circle-fill mr-2.5"
@@ -45,7 +47,7 @@ onMounted(async () => {
                   'state-paused': c.status === 'paused',
                 }"
               ></i>
-              {{ c.name }}
+              <span class="overflow-hidden"> {{ c.name }} </span>
             </div>
           </section>
         </RouterLink>
