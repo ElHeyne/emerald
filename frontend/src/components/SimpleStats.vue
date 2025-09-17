@@ -17,8 +17,6 @@ onMounted(async () => {
   } finally {
     state.isLoading = false
   }
-
-  console.log(state.data)
 })
 </script>
 <template>
@@ -31,7 +29,7 @@ onMounted(async () => {
     </div>
 
     <section class="max-w-sm p-4 border bd-em-gray-light rounded-lg bg-em-gray-darker mb-3">
-      <content class="grid grid-cols-3 gap-4 text-center">
+      <section class="grid grid-cols-3 gap-4 text-center">
         <div><b>Active</b></div>
         <div><b>Exited</b></div>
         <div><b>Inactive</b></div>
@@ -45,7 +43,7 @@ onMounted(async () => {
         <div>
           <b class="text-2xl state-paused">{{ state.data.paused }}</b>
         </div>
-      </content>
+      </section>
     </section>
   </section>
 </template>
