@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import docker, json
+import docker
 
 itgzImage = 'itzg/minecraft-server'
 
@@ -48,3 +48,19 @@ def containers_simple():
         return data
     except Exception as error:
         print("Error catching simple container data: ", error)
+
+@app.get("/container/{container_id}")
+def container(container_id: str):
+    try:
+        container = client.containers.get(container_id)
+        return {
+            "id": container.id,
+            "short_id": container.short_id,
+            "name": container.name,
+            "status": container.status,
+            "image": container.image.tags,
+        }
+    except Exception as error:
+        print("Error cathing container info: ", error)
+    
+    

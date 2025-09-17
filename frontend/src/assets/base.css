@@ -123,6 +123,29 @@
   .state-paused {
     color: var(--em-yellow);
   }
+
+  /*State Pills*/
+  .bg-state-running {
+    background-color: var(--em-light-green);
+  }
+
+  .bg-state-exited {
+    background-color: var(--em-red);
+  }
+
+  .bg-state-paused {
+    background-color: var(--em-yellow);
+  }
+
+  /*Primarly for vue spinners*/
+  .appearing {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .appearing.show {
+    opacity: 1;
+  }
 }
 
 /* @media (prefers-color-scheme: light) {

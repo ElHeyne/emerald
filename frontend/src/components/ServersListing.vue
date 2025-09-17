@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, computed, reactive } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import ServersListingCard from './ServersListingCard.vue'
 
 const state = reactive({
   containers: [],
@@ -32,26 +33,12 @@ onMounted(async () => {
     </div>
 
     <ul>
-      <span v-if="noServers && isLoading">No Servers</span>
-      <li v-for="c in state.containers" :key="c.id">
-        <RouterLink to="/servers">
-          <section
-            class="max-w-sm p-4 border bd-em-gray-light hover:bg-em-gray-light rounded-lg bg-em-gray-darker mb-3 duration-300 ease-in-out"
-          >
-            <div class="flex items-center">
-              <i
-                class="pi pi-circle-fill mr-2.5"
-                :class="{
-                  'state-exited': c.status === 'exited',
-                  'state-running': c.status === 'running',
-                  'state-paused': c.status === 'paused',
-                }"
-              ></i>
-              <span class="overflow-hidden"> {{ c.name }} </span>
-            </div>
-          </section>
-        </RouterLink>
-      </li>
+      <span v-if="noServers && state.isLoading">No Servers</span>
+      <ServersListingCard
+        v-for="container in state.containers"
+        :key="container.id"
+        :server="container"
+      />
     </ul>
   </section>
 </template>
