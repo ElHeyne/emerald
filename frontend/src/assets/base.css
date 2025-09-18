@@ -12,6 +12,9 @@
   --em-soft-green: #7effb3;
 
   --em-red: #eb4444;
+  --em-red-light: #fa6c6c;
+  --em-red-dark: #ca1e1e;
+
   --em-yellow: #f2c43d;
   --em-blue: #4473eb;
 }
@@ -67,7 +70,7 @@
   .hover\:bg-em-gray-soft {
     &:hover {
       @media (hover: hover) {
-        background-color: var(--em-darker-soft);
+        background-color: var(--em-soft-gray);
       }
     }
   }
@@ -87,6 +90,39 @@
 
   .bg-em-green-soft {
     background-color: var(--em-soft-green);
+  }
+
+  /* Hover Green Backgrounds */
+  .hover\:bg-em-green-darker {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-darker-green);
+      }
+    }
+  }
+
+  .hover\:bg-em-green-dark {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-dark-green);
+      }
+    }
+  }
+
+  .hover\:bg-em-green-light {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-light-green);
+      }
+    }
+  }
+
+  .hover\:bg-em-green-soft {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--em-soft-green);
+      }
+    }
   }
 
   /* Gray Borders */
@@ -135,6 +171,43 @@
 
   .bg-state-paused {
     background-color: var(--em-yellow);
+  }
+
+  /*Server Info Tool Bar*/
+  .bg-em-red{
+    background-color: var(--em-red);
+  }
+
+  .bg-em-red-light{
+    background-color: var(--em-red-light);
+  }
+
+  .bg-em-red-dark{
+    background-color: var(--em-red-dark);
+  }
+
+  .hover\:bg-em-red{
+    &:hover {
+      @media (hover: hover){
+        background-color: var(--em-red);
+      }
+    }
+  }
+
+  .hover\:bg-em-red-light{
+    &:hover {
+      @media (hover: hover){
+        background-color: var(--em-red-light);
+      }
+    }
+  }
+
+  .hover\:bg-em-red-dark{
+    &:hover {
+      @media (hover: hover){
+        background-color: var(--em-red-dark);
+      }
+    }
   }
 
   /*Primarly for vue spinners*/
