@@ -174,37 +174,37 @@
   }
 
   /*Server Info Tool Bar*/
-  .bg-em-red{
+  .bg-em-red {
     background-color: var(--em-red);
   }
 
-  .bg-em-red-light{
+  .bg-em-red-light {
     background-color: var(--em-red-light);
   }
 
-  .bg-em-red-dark{
+  .bg-em-red-dark {
     background-color: var(--em-red-dark);
   }
 
-  .hover\:bg-em-red{
+  .hover\:bg-em-red {
     &:hover {
-      @media (hover: hover){
+      @media (hover: hover) {
         background-color: var(--em-red);
       }
     }
   }
 
-  .hover\:bg-em-red-light{
+  .hover\:bg-em-red-light {
     &:hover {
-      @media (hover: hover){
+      @media (hover: hover) {
         background-color: var(--em-red-light);
       }
     }
   }
 
-  .hover\:bg-em-red-dark{
+  .hover\:bg-em-red-dark {
     &:hover {
-      @media (hover: hover){
+      @media (hover: hover) {
         background-color: var(--em-red-dark);
       }
     }
@@ -218,6 +218,13 @@
 
   .appearing.show {
     opacity: 1;
+  }
+
+  /*Scrollbarr stuff*/
+  .\[\&\:\:-webkit-scrollbar-thumb\]\:bg-em-gray {
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--em-soft-gray) /* oklch(87.1% 0.15 154.449) = #7bf1a8 */;
+    }
   }
 }
 

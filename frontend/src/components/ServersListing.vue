@@ -30,7 +30,7 @@ const notFound = computed(() => state.containers.detail === 'Not Found')
 </script>
 
 <template>
-  <section>
+  <section class="max-h-full">
     <h1 class="text-2xl font-bold mb-2.5">Minecraft Servers</h1>
 
     <!-- Loader -->
@@ -40,7 +40,11 @@ const notFound = computed(() => state.containers.detail === 'Not Found')
 
     <span v-if="noServers && !state.isLoading">No Servers</span>
     <span v-if="notFound && !state.isLoading">Python Api Error: Fetch URL Not Found</span>
-    <ul v-if="!noServers && !notFound && !state.isLoading">
+    <ul
+      v-if="!noServers && !notFound && !state.isLoading"
+      class="overflow-scroll overflow-x-hidden pr-1.5 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-em-gray"
+      style="height: calc(100% - 32px)"
+    >
       <ServersListingCard
         v-for="container in state.containers"
         :key="container.id"
