@@ -35,13 +35,16 @@ onMounted(async () => {
         <div><b>Inactive</b></div>
 
         <div>
-          <b class="text-2xl state-running">{{ state.data.running }}</b>
+          <b class="text-2xl state-running" v-if="state.data.running">{{ state.data.running }}</b>
+          <b class="text-2xl state-running" v-if="!state.data.running">0</b>
         </div>
         <div>
-          <b class="text-2xl state-exited">{{ state.data.exited }}</b>
+          <b class="text-2xl state-exited" v-if="state.data.exited">{{ state.data.exited }}</b>
+          <b class="text-2xl state-exited" v-if="!state.data.exited">0</b>
         </div>
         <div>
-          <b class="text-2xl state-paused">{{ state.data.paused }}</b>
+          <b class="text-2xl state-paused" v-if="state.data.paused">{{ state.data.paused }}</b>
+          <b class="text-2xl state-paused" v-if="!state.data.paused">0</b>
         </div>
       </section>
     </section>
