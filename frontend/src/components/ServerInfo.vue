@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, reactive, onMounted } from 'vue'
+import { defineProps, reactive, onMounted, inject, watch } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
 const state = reactive({
@@ -9,6 +9,14 @@ const state = reactive({
 
 const props = defineProps({
   containerId: null,
+})
+
+const webSocketUpdate = inject('update')
+
+watch(webSocketUpdate, (val) => {
+  if (val) {
+    console.log('Got new update in child:', val)
+  }
 })
 
 onMounted(async () => {
@@ -27,6 +35,20 @@ const isActiveBullet = (buttonState) => {
   if (state.isLoading) return false
   const containerStatus = state.container.status
   return containerStatus === buttonState
+}
+
+const startServer = async () => {
+  try {
+    const response = await fetch(`/pythonapi/container/${props.containerId}/start`, {
+      method: 'POST',
+    })
+    const data = await response.json()
+
+    console.log(data)
+  } catch (error) {
+    console.error('Error starting server: ', error)
+  } finally {
+  }
 }
 </script>
 
@@ -56,6 +78,7 @@ const isActiveBullet = (buttonState) => {
       <div class="h-10 max-w-lg bg-em-gray-darker border bd-em-gray-darker rounded-lg">
         <div class="grid h-full max-w-lg grid-cols-5 mx-auto">
           <button
+            @click="startServer"
             class="inline-flex flex-col items-center justify-center px-5 rounded-s-lg hover:bg-green-500"
             :class="[isActiveBullet('running') ? 'text-green-500 hover:text-white' : 'text-white']"
           >
