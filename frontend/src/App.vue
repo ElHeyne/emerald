@@ -1,21 +1,32 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { provide, readonly, ref, onUnmounted } from 'vue'
+import { onUnmounted, onMounted } from 'vue'
+import { useContainerStore } from '@/stores/containerStore'
 
-const webSocketUpdate = ref(null)
+const containerStore = useContainerStore()
+const ws = new WebSocket(URL='ws://localhost:8000/ws')
 
-const ws = new WebSocket('ws://localhost:8000/ws')
+onMounted(async() => {
+  const response = await fetch(`/pythonapi/containers`)
+    const data = await response.json()
+    const containers = data
+    containerStore.setContainers(containers)
+})
 
 ws.onmessage = (event) => {
-  webSocketUpdate.value = JSON.parse(event.data)
-  console.log('Web Socket', webSocketUpdate.value)
+  if (event.status === "error"){
+    console.log("I got an error!") /**TODO MANAGE ERRORS */
+  } else {
+    const msg = JSON.parse(event.data)
+    console.log("DEBUB: ", msg) /**TODO KEEP ERROR MSG? */
+
+    containerStore.updateContainerStatus(msg.id, msg.status)
+  }
 }
 
 onUnmounted(() => {
   ws.close()
 })
-
-provide('update', readonly(webSocketUpdate))
 </script>
 
 <template>
