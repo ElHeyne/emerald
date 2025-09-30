@@ -160,6 +160,35 @@
     color: var(--em-yellow);
   }
 
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  .state-exiting {
+    color: var(--em-red);
+    animation: pulse 0.8s infinite ease-out;
+  }
+
+  .state-starting {
+    color: var(--em-light-green);
+    animation: pulse 0.8s infinite ease-out;
+  }
+
+  .bg-state-exiting {
+    background-color: var(--em-red);
+    animation: pulse 0.8s infinite ease-out;
+  }
+
+  .bg-state-starting {
+    background-color: var(--em-light-green);
+    animation: pulse 0.8s infinite ease-out;
+  }
+
   /*State Pills*/
   .bg-state-running {
     background-color: var(--em-light-green);
