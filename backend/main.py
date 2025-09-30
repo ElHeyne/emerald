@@ -1,7 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 import docker
-import websockets
 import asyncio
 import threading
 
@@ -27,6 +26,7 @@ def containers():
         for c in containers:
             filtered.append({
                 "id": c.id,
+                "short_id": c.short_id,
                 "name": c.name,
                 "status": c.status,
                 "image": c.image.tags
@@ -75,7 +75,7 @@ def container_start(container_id: str):
         data = {"status": "success", "message": "Server started", "container_name": container.name, "container_sid": container.short_id}
     except docker.errors.NotFound:
         print("Error carching container: ", error)
-        data = {"status": "success", "message": "Server started"}
+        data = {"status": "error", "message": "Docker Not Found"}
     except Exception as error:
         print("Error starting the container: ", error)
         data = {"status": "error", "message": "Error starting server", "container_name": container.name, "container_sid": container.short_id}
@@ -85,9 +85,18 @@ def container_start(container_id: str):
 @app.post("/container/{container_id}/stop")
 def container_start(container_id: str):
     try:
+        container = client.containers.get(container_id)
+        container.stop()
         print("stop: ", container_id)
+        data = {"status": "success", "message": "Server stopped", "container_name": container.name, "container_sid": container.short_id}
+    except docker.errors.NotFound:
+        print("Error carching container: ", error)
+        data = {"status": "error", "message": "Docker Not Found"}
     except Exception as error:
         print("Error stopping the container: ", error)
+        data = {"status": "error", "message": "Error stopping server", "container_name": container.name, "container_sid": container.short_id}
+    finally:
+        return data
 
 @app.post("/container/{container_id}/restart")
 def container_start(container_id: str):
@@ -114,7 +123,7 @@ async def docker_websocket(websocket: WebSocket):
             status = event.get("status", "")
             if status in {"start", "stop", "restart", "die", "destroy"}:
                 asyncio.run_coroutine_threadsafe(websocket.send_json(event), loop)
-                print("DOCKER EVENT WS: ", event)
+                print("Docker event: ", event)
 
     threading.Thread(target=docker_events, daemon=True).start()
 
