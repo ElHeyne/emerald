@@ -101,9 +101,18 @@ def container_start(container_id: str):
 @app.post("/container/{container_id}/restart")
 def container_start(container_id: str):
     try:
+        container = client.containers.get(container_id)
+        container.restart()
         print("restart: ", container_id)
+        data = {"status": "success", "message": "Server restarted", "container_name": container.name, "container_sid": container.short_id}
+    except docker.errors.NotFound:
+        print("Error carching container: ", error)
+        data = {"status": "error", "message": "Docker Not Found"}
     except Exception as error:
         print("Error restarting the container: ", error)
+        data = {"status": "error", "message": "Error restarting server", "container_name": container.name, "container_sid": container.short_id}
+    finally:
+        return data
 
 @app.delete("/container/{container_id}")
 def container_start(container_id: str):

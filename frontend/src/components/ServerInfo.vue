@@ -71,6 +71,22 @@ const stopServer = async () => {
     console.error('Error stopping server: ', error)
   }
 }
+
+const restartServer = async () => {
+  try {
+    const idFound = containerStore.list.findIndex(c => c.id === props.containerId)
+    if (idFound >= 0) {
+      containerStore.list[idFound].status = "exiting"
+    }
+    const response = await fetch(`/pythonapi/container/${props.containerId}/restart`, {
+      method: 'POST',
+    })
+    const data = await response.json()
+    console.log("DEBUG: ", data)
+  } catch (error) {
+    console.error('Error restarting server: ', error)
+  }
+}
 </script>
 
 <template>
@@ -127,6 +143,7 @@ const stopServer = async () => {
             <a class="pi pi-stop"></a>
           </button>
           <button
+            @click="restartServer"
             class="inline-flex flex-col items-center justify-center px-5"
             :class="[
               isActiveBullet('starting') ? '!text-gray-700' : '', 
