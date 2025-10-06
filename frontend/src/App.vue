@@ -14,6 +14,7 @@ onMounted(async() => {
 })
 
 ws.onmessage = (event) => {
+  console.log("WebSocket message received:", event)
   if (event.status === "error"){
     console.log("I got an error!") /**TODO MANAGE ERRORS */
   } else {
