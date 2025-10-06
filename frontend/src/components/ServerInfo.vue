@@ -1,6 +1,9 @@
 <script setup>
-import { defineProps, reactive, onMounted } from 'vue'
+import { defineProps, reactive, onMounted, inject, watch } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import { useContainerStore } from '@/stores/containerStore'
+
+const containerStore = useContainerStore()
 
 const state = reactive({
   container: {},
@@ -12,21 +15,77 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-  try {
-    const response = await fetch(`/pythonapi/container/${props.containerId}`)
-    const data = await response.json()
-    state.container = data
-  } catch (error) {
-    console.error('Error fetching container details: ', error)
-  } finally {
+  const idFound = containerStore.list.findIndex(c => c.id === props.containerId)
+  if (idFound >= 0) {
+    state.container = containerStore.list[idFound]
     state.isLoading = false
   }
 })
+
+watch(
+  () => containerStore.list,
+  (newList) => {
+    const idFound = newList.findIndex(c => c.id === props.containerId)
+    if (idFound >= 0) {
+      state.container = newList[idFound]
+      state.isLoading = false
+    }
+  },
+  { inmediate: true }
+)
 
 const isActiveBullet = (buttonState) => {
   if (state.isLoading) return false
   const containerStatus = state.container.status
   return containerStatus === buttonState
+}
+
+const startServer = async () => {
+  try {
+    const idFound = containerStore.list.findIndex(c => c.id === props.containerId)
+    if (idFound >= 0) {
+      containerStore.list[idFound].status = "starting"
+    }
+    const response = await fetch(`/pythonapi/container/${props.containerId}/start`, {
+      method: 'POST',
+    })
+    const data = await response.json()
+    console.log("DEBUG: ", data)
+  } catch (error) {
+    console.error('Error starting server: ', error)
+  }
+}
+
+const stopServer = async () => {
+  try {
+    const idFound = containerStore.list.findIndex(c => c.id === props.containerId)
+    if (idFound >= 0) {
+      containerStore.list[idFound].status = "exiting"
+    }
+    const response = await fetch(`/pythonapi/container/${props.containerId}/stop`, {
+      method: 'POST',
+    })
+    const data = await response.json()
+    console.log("DEBUG: ", data)
+  } catch (errir) {
+    console.error('Error stopping server: ', error)
+  }
+}
+
+const restartServer = async () => {
+  try {
+    const idFound = containerStore.list.findIndex(c => c.id === props.containerId)
+    if (idFound >= 0) {
+      containerStore.list[idFound].status = "exiting"
+    }
+    const response = await fetch(`/pythonapi/container/${props.containerId}/restart`, {
+      method: 'POST',
+    })
+    const data = await response.json()
+    console.log("DEBUG: ", data)
+  } catch (error) {
+    console.error('Error restarting server: ', error)
+  }
 }
 </script>
 
@@ -45,41 +104,76 @@ const isActiveBullet = (buttonState) => {
             'bg-state-exited': state.container.status === 'exited',
             'bg-state-running': state.container.status === 'running',
             'bg-state-paused': state.container.status === 'paused',
+            'bg-state-exiting': state.container.status === 'exiting',
+            'bg-state-starting': state.container.status === 'starting',
           }"
         >
           {{ state.container.status }}
         </section>
       </div>
     </section>
-
+    
     <section>
       <div class="h-10 max-w-lg bg-em-gray-darker border bd-em-gray-darker rounded-lg">
         <div class="grid h-full max-w-lg grid-cols-5 mx-auto">
           <button
-            class="inline-flex flex-col items-center justify-center px-5 rounded-s-lg hover:bg-green-500"
-            :class="[isActiveBullet('running') ? 'text-green-500 hover:text-white' : 'text-white']"
+            @click="startServer"
+            class="inline-flex flex-col items-center justify-center px-5 rounded-s-lg"
+            :class="[
+              isActiveBullet('starting') ? '!text-gray-700' : '', 
+              isActiveBullet('exiting') ? '!text-gray-700' : '', 
+              isActiveBullet('running') ? 'text-green-500' : '', 
+              isActiveBullet('running') || isActiveBullet('starting') || isActiveBullet('exiting')
+                ? ''
+                : 'text-white hover:bg-green-500']"
           >
             <a class="pi pi-play"></a>
           </button>
           <button
-            class="inline-flex flex-col items-center justify-center px-5 hover:bg-em-gray-light"
-            :class="[isActiveBullet('exited') ? 'text-red-500' : 'text-white']"
+            @click="stopServer"
+            class="inline-flex flex-col items-center justify-center px-5"
+            :class="[
+              isActiveBullet('starting') ? '!text-gray-700' : '', 
+              isActiveBullet('exiting') ? '!text-gray-700' : '', 
+              isActiveBullet('exited') ? 'text-red-500' : '', 
+              isActiveBullet('exited') || isActiveBullet('starting') || isActiveBullet('exiting')
+                ? ''
+                : 'text-white hover:bg-em-gray-light']"
           >
             <a class="pi pi-stop"></a>
           </button>
           <button
-            class="inline-flex flex-col items-center justify-center px-5 hover:bg-em-gray-light"
-            :class="[isActiveBullet('paused') ? 'text-yellow-500' : 'text-white']"
+            @click="restartServer"
+            class="inline-flex flex-col items-center justify-center px-5"
+            :class="[
+              isActiveBullet('starting') ? '!text-gray-700' : '', 
+              isActiveBullet('exiting') ? '!text-gray-700' : '', 
+              isActiveBullet('paused') ? 'text-yellow-500' : '',
+              isActiveBullet('starting') || isActiveBullet('exiting')
+                ? ''
+                : 'text-white hover:bg-em-gray-light']"
           >
             <a class="pi pi-refresh"></a>
           </button>
           <button
-            class="inline-flex flex-col items-center justify-center px-5 hover:bg-em-gray-light"
+            class="inline-flex flex-col items-center justify-center px-5"
+            :class="[
+              isActiveBullet('starting') ? '!text-gray-700' : '', 
+              isActiveBullet('exiting') ? '!text-gray-700' : '',
+              isActiveBullet('starting') || isActiveBullet('exiting')
+                ? ''
+                : 'text-white hover:bg-em-gray-light']"
           >
             <a class="pi pi-pencil"></a>
           </button>
           <button
-            class="inline-flex flex-col items-center justify-center px-5 rounded-e-lg bg-em-red hover:bg-em-red-dark"
+            class="inline-flex flex-col items-center justify-center px-5 rounded-e-lg"
+            :class="[
+              isActiveBullet('starting') ? '!text-gray-700' : '', 
+              isActiveBullet('exiting') ? '!text-gray-700' : '', 
+              isActiveBullet('starting') || isActiveBullet('exiting')
+                ? ''
+                : 'bg-em-red hover:bg-em-red-dark']"
           >
             <a class="pi pi-trash"></a>
           </button>

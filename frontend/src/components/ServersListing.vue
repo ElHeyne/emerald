@@ -1,7 +1,10 @@
 <script setup>
-import { onMounted, computed, reactive } from 'vue'
+import { onMounted, computed, reactive, watch } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import ServersListingCard from './ServersListingCard.vue'
+import { useContainerStore } from '@/stores/containerStore'
+
+const containerStore = useContainerStore()
 
 const state = reactive({
   containers: [],
@@ -9,20 +12,25 @@ const state = reactive({
 })
 
 onMounted(async () => {
-  try {
-    const res = await fetch('/pythonapi/containers?all=true')
-    const data = await res.json()
-    state.containers = data
-    if (data.detail === 'Not Found') {
-      throw new Error(
-        'Pythonapi, Containers not found.',
-      ) /* TODO Show specific error message on the web if the error is due and api not found */
+  onMounted(async () => {
+    const data = containerStore.list
+    if (data.length >= 0) {
+      state.containers = containerStore.list
+      state.isLoading = false
     }
-  } catch (error) {
-    console.error('Error fetching containers: ', error)
-  } finally {
-    state.isLoading = false
-  }
+  })
+
+  watch(
+    () => containerStore.list,
+    (newList) => {
+      const data = newList
+      if (data.length >= 0) {
+        state.containers = newList
+        state.isLoading = false
+      }
+    },
+    { inmediate: true }
+  )
 })
 
 const noServers = computed(() => state.containers.length === 0)

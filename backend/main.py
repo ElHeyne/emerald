@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 import docker
+import asyncio
+import threading
 
 itgzImage = 'itzg/minecraft-server'
 
@@ -24,6 +26,7 @@ def containers():
         for c in containers:
             filtered.append({
                 "id": c.id,
+                "short_id": c.short_id,
                 "name": c.name,
                 "status": c.status,
                 "image": c.image.tags
@@ -62,5 +65,79 @@ def container(container_id: str):
         }
     except Exception as error:
         print("Error cathing container info: ", error)
+
+@app.post("/container/{container_id}/start")
+def container_start(container_id: str):
+    try:
+        container = client.containers.get(container_id)
+        container.start()
+        print("start: ", container_id)
+        data = {"status": "success", "message": "Server started", "container_name": container.name, "container_sid": container.short_id}
+    except docker.errors.NotFound:
+        print("Error carching container: ", error)
+        data = {"status": "error", "message": "Docker Not Found"}
+    except Exception as error:
+        print("Error starting the container: ", error)
+        data = {"status": "error", "message": "Error starting server", "container_name": container.name, "container_sid": container.short_id}
+    finally:
+        return data
+
+@app.post("/container/{container_id}/stop")
+def container_start(container_id: str):
+    try:
+        container = client.containers.get(container_id)
+        container.stop()
+        print("stop: ", container_id)
+        data = {"status": "success", "message": "Server stopped", "container_name": container.name, "container_sid": container.short_id}
+    except docker.errors.NotFound:
+        print("Error carching container: ", error)
+        data = {"status": "error", "message": "Docker Not Found"}
+    except Exception as error:
+        print("Error stopping the container: ", error)
+        data = {"status": "error", "message": "Error stopping server", "container_name": container.name, "container_sid": container.short_id}
+    finally:
+        return data
+
+@app.post("/container/{container_id}/restart")
+def container_start(container_id: str):
+    try:
+        container = client.containers.get(container_id)
+        container.restart()
+        print("restart: ", container_id)
+        data = {"status": "success", "message": "Server restarted", "container_name": container.name, "container_sid": container.short_id}
+    except docker.errors.NotFound:
+        print("Error carching container: ", error)
+        data = {"status": "error", "message": "Docker Not Found"}
+    except Exception as error:
+        print("Error restarting the container: ", error)
+        data = {"status": "error", "message": "Error restarting server", "container_name": container.name, "container_sid": container.short_id}
+    finally:
+        return data
+
+@app.delete("/container/{container_id}")
+def container_start(container_id: str):
+    try:
+        print("delete: ", container_id)
+    except Exception as error:
+        print("Error deleting the container: ", error)
     
-    
+@app.websocket("/ws")
+async def docker_websocket(websocket: WebSocket):
+    await websocket.accept()
+
+    loop = asyncio.get_event_loop()
+
+    def docker_events():
+        for event in client.events(decode=True):
+            status = event.get("status", "")
+            if status in {"start", "stop", "restart", "die", "destroy"}:
+                asyncio.run_coroutine_threadsafe(websocket.send_json(event), loop)
+                print("Docker event: ", event)
+
+    threading.Thread(target=docker_events, daemon=True).start()
+
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except Exception as error:
+        print("Websocket error / disconection: ", error)

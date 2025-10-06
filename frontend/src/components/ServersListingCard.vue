@@ -31,6 +31,8 @@ const isActiveServer = (data) => {
             'state-exited': server.status === 'exited',
             'state-running': server.status === 'running',
             'state-paused': server.status === 'paused',
+            'state-exiting': server.status === 'exiting',
+            'state-starting': server.status === 'starting',
           }"
         ></i>
         <span class="overflow-hidden text-sm"> {{ server.name }} </span>
